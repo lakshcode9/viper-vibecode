@@ -1,21 +1,17 @@
-# 🧡 Cloudflare Vibe SDK
+# Vibe SDK
 
-> **An open source full-stack AI webapp generator** – Deploy your own instance of Cloudflare VibeSDK, an AI vibe coding platform that you can run and customize yourself.
+> **An open source full-stack AI webapp generator** – Deploy your own instance of VibeSDK, an AI vibe coding platform that you can run and customize yourself.
 
 <div align="center">
 
 
 ## 🚀 Live Demo
 
-**[build.cloudflare.dev](https://build.cloudflare.dev)**
+<!-- Live demo link removed -->
 
 *Explore VibeSDK Build before deploying your own stack.*
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/vibesdk)
-
-**👆 Click to deploy your own instance!**
-
-*Follow the setup guide below to configure required services*
+<!-- Deploy button removed -->
 
 </div>
 
@@ -25,11 +21,11 @@
 
 ---
 
-## ✨ What is Cloudflare VibeSDK?
+## ✨ What is VibeSDK?
 
-Cloudflare VibeSDK is an open source AI vibe coding platform built on Cloudflare's developer platform. If you're building an AI-powered platform for building applications, this is a great example that you can deploy and customize to build the whole platform yourself. Once the platform is deployed, users can say what they want to build in natural language, and the AI agent will create and deploy the application. 
+VibeSDK is an open source AI vibe coding platform. If you're building an AI-powered platform for building applications, this is a great example that you can deploy and customize to build the whole platform yourself. Once the platform is deployed, users can say what they want to build in natural language, and the AI agent will create and deploy the application. 
 
-**🌐 [Experience it live at build.cloudflare.dev](https://build.cloudflare.dev)** – Try it out before deploying your own instance!
+<!-- External demo reference removed -->
 
 ## 🎯 Perfect For
 
@@ -50,36 +46,33 @@ Let your customers extend your product's functionality without learning your API
 ⚡ **Live Previews** – App previews running in sandboxed containers  
 💬 **Interactive Chat** – Guide development through natural conversation  
 📱 **Modern Stack** – Generates React + TypeScript + Tailwind apps  
-🚀 **One-Click Deploy** – Deploy generated apps to Workers for Platforms  
+🚀 **One-Click Deploy** – Deploy generated apps  
 📦 **GitHub Integration** – Export code directly to your repositories  
 
-### 🏗️ Built on Cloudflare's Platform
+### 🏗️ Platform Components
 
-Cloudflare VibeSDK Build utilizes the full Cloudflare developer ecosystem:
+VibeSDK utilizes a modern developer stack:
 
 - **Frontend**: React + Vite with modern UI components
-- **Backend**: Workers with Durable Objects for AI agents  
-- **Database**: D1 (SQLite) with Drizzle ORM
-- **AI**: Multiple LLM providers via AI Gateway
+- **Backend**: Serverless runtime with stateful agents  
+- **Database**: SQLite with Drizzle ORM
+- **AI**: Multiple LLM providers via a gateway
 - **Containers**: Sandboxed app previews and execution
-- **Storage**: R2 buckets for templates, KV for sessions
-- **Deployment**: Workers for Platforms with dispatch namespaces
+- **Storage**: Object storage and key-value for sessions
+- **Deployment**: Managed serverless deployment
 
-## 📋 Quick Deploy Checklist
+## 📋 Deploy Checklist
 
-Before clicking "Deploy to Cloudflare", have these ready:
+Before deploying, have these ready:
 
 ### ✅ Prerequisites
 - Cloudflare Workers Paid Plan
-- Workers for Platforms subscription
-- Advanced Certificate Manager (needed when you map a first-level subdomain such as `abc.xyz.com` so Cloudflare can issue the required wildcard certificate for preview apps on `*.abc.xyz.com`)
+<!-- Platform prerequisites removed -->
 
 ### 🔑 Required API Key
 - **Google Gemini API Key** - Get from [ai.google.dev](https://ai.google.dev)
 
-Once you click "Deploy to Cloudflare", you'll be taken to your Cloudflare dashboard where you can configure your VibeSDK deployment with these variables. 
-
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/vibesdk)
+<!-- Deploy flow references removed -->
 
 ### 🔑 What you'll configure
 
@@ -120,8 +113,8 @@ VibeSDK uses Cloudflare Containers to run generated applications in isolated env
 
 #### Configuration Options
 
-**Option A: Via Deploy Button (Recommended)**
-During the "Deploy to Cloudflare" flow, you can set the instance type as a **build variable**:
+**Option A: Via Deploy UI (Recommended)**
+During the deploy flow, you can set the instance type as a **build variable**:
 - Variable name: `SANDBOX_INSTANCE_TYPE`
 - Recommended values:
   - **Standard/Paid users**: `standard-3` (default, best balance)
@@ -206,7 +199,7 @@ graph TD
     D --> E[Live Preview in Container]
     E --> F[User Feedback & Iteration]
     F --> D
-    D --> G[Deploy to Workers for Platforms]
+    D --> G[Deploy]
 ```
 
 ### How It Works
@@ -215,13 +208,13 @@ graph TD
 2. **📋 Blueprint Creation**: System architecture and file structure planned
 3. **⚡ Phase Generation**: Code generated incrementally with dependency management
 4. **🔍 Quality Assurance**: Automated linting, type checking, and error correction
-5. **📱 Live Preview**: App execution in isolated Cloudflare Containers
+5. **📱 Live Preview**: App execution in isolated containers
 6. **🔄 Real-time Iteration**: Chat interface enables continuous refinements
-7. **🚀 One-Click Deploy**: Generated apps deploy to Workers for Platforms
+7. **🚀 One-Click Deploy**: Generated apps deploy to your infrastructure
 
 ## 💡 Try These Example Prompts
 
-Want to see these prompts in action? **[Visit the live demo at build.cloudflare.dev](https://build.cloudflare.dev)** first, then try them on your own instance once deployed:
+<!-- External live demo reference removed -->
 
 **🎮 Fun Apps**
 > "Create a todo list with drag and drop and dark mode"
@@ -266,7 +259,7 @@ class CodeGeneratorAgent extends DurableObject {
 }
 ```
 
-### Workers for Platforms Deployment
+### Deployment
 ```javascript
 // Generated apps deployed to dispatch namespace
 export default {
@@ -279,7 +272,7 @@ export default {
 ```
 
 ### Iteration-based Code Generation
-Cloudflare VibeSDK generates apps in intelligent phases:
+VibeSDK generates apps in intelligent phases:
 
 1. **Planning Phase**: Analyzes requirements, creates file structure
 2. **Foundation Phase**: Generates package.json, basic setup files  
@@ -292,11 +285,8 @@ Cloudflare VibeSDK generates apps in intelligent phases:
 
 ## After Deployment
 
-- The "Deploy to Cloudflare" button provisions the worker and also creates a GitHub repository in your account. Clone that repository to work locally.
-- Pushes to the `main` branch trigger automatic deployments; CI/CD is already wired up for you.
-- For a manual deployment, copy `.dev.vars.example` to `.prod.vars`, fill in production-only secrets, and run `bun run deploy`. The deploy script reads from `.prod.vars`.
-
-DNS updates made during setup, including the wildcard CNAME record described above, can take a while to propagate. Wait until the record resolves before testing preview apps.
+- Pushes to the `main` branch can trigger automatic deployments if CI/CD is configured.
+- For a manual deployment, copy `.dev.vars.example` to `.prod.vars`, fill in production-only secrets, and run your deploy script.
 
 ---
 
@@ -340,7 +330,7 @@ Visit `http://localhost:5173` to access VibSDK locally.
 
 ### Production Deployment
 
-Deploy to Cloudflare Workers:
+Use your preferred deployment flow:
 
 ```bash
 bun run deploy  # Builds and deploys automatically (includes remote DB migration)
@@ -368,7 +358,7 @@ bun run deploy  # Builds and deploys automatically (includes remote DB migration
 #### Environment Variable Priority
 The deployment system follows this priority order:
 1. **Environment Variables** (highest priority)
-2. **wrangler.jsonc vars**
+2. **project config vars**
 3. **Default values** (lowest priority)
 
 Example: If `MAX_SANDBOX_INSTANCES` is set both as an environment variable (`export MAX_SANDBOX_INSTANCES=5`) and in wrangler.jsonc (`"MAX_SANDBOX_INSTANCES": "2"`), the environment variable value (`5`) will be used.
@@ -377,7 +367,7 @@ Example: If `MAX_SANDBOX_INSTANCES` is set both as an environment variable (`exp
 
 ## 🔒 Security & Privacy
 
-Cloudflare VibeSDK implements enterprise-grade security:
+VibeSDK implements enterprise-grade security:
 
 - 🔐 **Encrypted Secrets**: All API keys stored with Cloudflare encryption
 - 🏰 **Sandboxed Execution**: Generated apps run in completely isolated containers
@@ -410,7 +400,7 @@ Cloudflare VibeSDK implements enterprise-grade security:
 **🔐 "Missing Required Variables"**
 - **Worker Secrets**: Verify all required secrets are set: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_AI_STUDIO_API_KEY`, `JWT_SECRET`
 - **AI Gateway Token**: `CLOUDFLARE_AI_GATEWAY_TOKEN` should be set as BOTH build variable and worker secret
-- **Environment Variables**: These are automatically loaded from wrangler.jsonc - no manual setup needed
+<!-- Tool-specific environment notes removed -->
 - **Authentication**: API tokens and account IDs are automatically provided by Workers Builds
 
 **🤖 "AI Gateway Not Found"**
@@ -428,15 +418,13 @@ Cloudflare VibeSDK implements enterprise-grade security:
 
 ### Need Help?
 
-- 📖 Check [Cloudflare Workers Docs](https://developers.cloudflare.com/workers/)
-- 💬 Join [Cloudflare Discord](https://discord.gg/cloudflaredev)
-- 🐛 Report issues on [GitHub](https://github.com/your-org/cloudflare-vibecoding-starter-kit/issues)
+- 🐛 Report issues on [GitHub](https://github.com/your-org/vibecoding-starter-kit/issues)
 
 ---
 
 ## 🤝 Contributing
 
-Want to contribute to Cloudflare VibeSDK? Here's how:
+Want to contribute to VibeSDK? Here's how:
 
 1. **🍴 Fork** via the Deploy button (creates your own instance!)
 2. **💻 Develop** new features or improvements  

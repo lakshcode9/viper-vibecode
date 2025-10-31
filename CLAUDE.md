@@ -3,7 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-This is an official Cloudflare product - a React+Vite frontend with Cloudflare Workers backend that features a Durable Object-based AI agent capable of building webapps phase-wise from user prompts.
+This project is a React + Vite frontend with a serverless backend that features a Durable Object-style AI agent capable of building webapps phase-wise from user prompts.
 
 **Important Context:**
 - Core functionality: AI-powered webapp generation via Durable Objects
@@ -21,14 +21,14 @@ npm run lint             # Run ESLint
 npm run preview          # Preview production build
 ```
 
-### Worker Development
+### Backend Development
 ```bash
-npm run local            # Run Worker locally with Wrangler
-npm run cf-typegen       # Generate TypeScript types for CF bindings
-npm run deploy           # Deploy to Cloudflare Workers + secrets
+npm run local            # Run backend locally
+npm run typegen          # Generate TypeScript types for environment bindings
+npm run deploy           # Deploy backend + secrets
 ```
 
-### Database (D1) - Under Development
+### Database - Under Development
 ```bash
 npm run db:setup         # Initial database setup
 npm run db:generate      # Generate migrations (local)
@@ -94,9 +94,9 @@ Current implementation in `worker/auth/` and `worker/api/controllers/authControl
 3. Add new message types for WebSocket protocol
 4. Update frontend handler in `src/routes/chat/hooks/use-chat.ts`
 
-### Cloudflare-Specific Patterns
-- **Durable Objects**: Used for stateful, long-running operations
-- **D1 Database**: SQLite-based, use batch operations for performance
+### Backend Patterns
+- **Stateful Agent**: Used for stateful, long-running operations
+- **Database**: SQLite-based, use batch operations for performance
 - **Environment Bindings**: Access via `env` parameter (AI, DB, CodeGenObject)
 - **Service Bindings**: Runner service accessed via `env.RUNNER_SERVICE`
 
@@ -109,7 +109,6 @@ Required in `.dev.vars` for local development:
 
 ## Important Notes
 - Focus on core AI generation functionality when making changes
-- Prioritize Cloudflare-native solutions (D1, Durable Objects, R2)
 - Always **strictly** follow DRY principles
 - Keep code quality high and maintainability in mind
 - Always research and understand the codebase before making changes
@@ -127,14 +126,14 @@ Required in `.dev.vars` for local development:
 3. Verify Runner Service connectivity
 4. Review generation state in `CodeGeneratorAgent`
 
-### Working with Durable Objects
+### Working with Stateful Agents
 - Class: `worker/agents/codegen/phasewiseGenerator.ts`
 - Binding: `env.CodeGenObject`
 - ID Generation: Based on session/user context
-- State Persistence: Automatic via Cloudflare
+- State Persistence: Automatic via platform
 
 ### Runner Service Integration
 - Executes generated code in isolated environment
 - Provides runtime error feedback
 - Returns preview URLs for generated apps
-- Configuration in `wrangler.jsonc`
+- Configuration in project config
