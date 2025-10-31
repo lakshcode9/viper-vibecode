@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="kliqFaviconGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A033FF" />
+      <stop offset="50%" stop-color="#FF00FF" />
+      <stop offset="100%" stop-color="#FF9933" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="100" fill="#1a0f26"/>
+  
+  <!-- Main circle -->
+  <circle cx="100" cy="100" r="70" stroke="url(#kliqFaviconGradient)" stroke-width="10" fill="none"/>
+  
+  <!-- K Letter centered -->
+  <g transform="translate(100, 100)">
+    <path d="M -20 -40 L -20 40" stroke="url(#kliqFaviconGradient)" stroke-width="14" stroke-linecap="round"/>
+    <path d="M -20 0 L 30 -30" stroke="url(#kliqFaviconGradient)" stroke-width="14" stroke-linecap="round"/>
+    <path d="M -20 0 L 30 30" stroke="url(#kliqFaviconGradient)" stroke-width="14" stroke-linecap="round"/>
+  </g>
+</svg>
+
