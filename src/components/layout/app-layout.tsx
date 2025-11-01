@@ -12,6 +12,8 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   const { pathname } = useLocation();
+  const isHomePage = pathname === "/";
+  
   return (
     <AppsDataProvider>
       <SidebarProvider 
@@ -22,9 +24,9 @@ export function AppLayout({ children }: AppLayoutProps) {
           "--sidebar-width-icon": "52px"
         } as React.CSSProperties}
       >
-        <AppSidebar />
+        {!isHomePage && <AppSidebar />}
         <SidebarInset className={clsx("bg-bg-3 flex flex-col h-screen relative", pathname !== "/" && "overflow-hidden")}>
-          <GlobalHeader />
+          {!isHomePage && <GlobalHeader />}
           <div className={clsx("flex-1 bg-bg-3", pathname !== "/" && "min-h-0 overflow-auto")}>
             {children || <Outlet />}
           </div>

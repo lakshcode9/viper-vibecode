@@ -8,7 +8,7 @@ import {
 } from '../components/agent-mode-toggle';
 import { useAuthGuard } from '../hooks/useAuthGuard';
 import { usePaginatedApps } from '@/hooks/use-paginated-apps';
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { AppCard } from '@/components/shared/AppCard';
 import clsx from 'clsx';
 import { useImageUpload } from '@/hooks/use-image-upload';
@@ -16,6 +16,10 @@ import { useDragDrop } from '@/hooks/use-drag-drop';
 import { ImageUploadButton } from '@/components/image-upload-button';
 import { ImageAttachmentPreview } from '@/components/image-attachment-preview';
 import { SUPPORTED_IMAGE_MIME_TYPES } from '@/api-types';
+import { WavyBackground } from '@/components/ui/wavy-background';
+import { Button } from '@/components/ui/button';
+import { Sparkles, Code, Rocket } from 'lucide-react';
+import { useAuthModal } from '@/components/auth/AuthModalProvider';
 
 export default function Home() {
 	const navigate = useNavigate();
@@ -24,6 +28,7 @@ export default function Home() {
 	const [agentMode, setAgentMode] = useState<AgentMode>('deterministic');
 	const [query, setQuery] = useState('');
 	const { user } = useAuth();
+	const { showAuthModal } = useAuthModal();
 
 	const { images, addImages, removeImage, clearImages, isProcessing } = useImageUpload({
 		onError: (error) => {
@@ -130,381 +135,254 @@ export default function Home() {
 		}
 	}, [currentPlaceholderText, currentPlaceholderPhraseIndex, isPlaceholderTyping, placeholderPhrases]);
 
-	const discoverLinkRef = useRef<HTMLDivElement>(null);
-
 	return (
-		<div className="relative flex flex-col items-center size-full">
-			{/* Dotted background pattern - extends to full viewport */}
-			<div className="fixed inset-0 text-accent z-0 opacity-20 pointer-events-none">
-				<svg width="100%" height="100%">
-					<defs>
-						<pattern
-							id=":S2:"
-							viewBox="-6 -6 12 12"
-							patternUnits="userSpaceOnUse"
-							width="12"
-							height="12"
-						>
-							<circle
-								cx="0"
-								cy="0"
-								r="1"
-								fill="currentColor"
-							></circle>
-						</pattern>
-					</defs>
-					<rect
-						width="100%"
-						height="100%"
-						fill="url(#:S2:)"
-					></rect>
-				</svg>
-			</div>
+		<WavyBackground
+			containerClassName="min-h-screen"
+			colors={["#A033FF", "#FF00FF", "#FF9933", "#22d3ee", "#818cf8"]}
+			waveWidth={50}
+			backgroundFill="transparent"
+			blur={10}
+			speed="fast"
+			waveOpacity={0.5}
+		>
+			<div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
 			
-			<LayoutGroup>
-				<div className="rounded-md w-full max-w-2xl overflow-hidden">
-					<motion.div
-						layout
-						transition={{ layout: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
-						className={clsx(
-							"px-6 p-8 flex flex-col items-center z-10",
-							discoverReady ? "mt-48" : "mt-[20vh] sm:mt-[24vh] md:mt-[28vh]"
-						)}>
-						<h1 className="text-shadow-sm text-shadow-red-200 dark:text-shadow-red-900 text-accent font-medium leading-[1.1] tracking-tight text-5xl w-full mb-4 bg-clip-text bg-gradient-to-r from-text-primary to-text-primary/90">
-							What should we build today?
-						</h1>
-
-						<form
-							method="POST"
-							onSubmit={(e) => {
-								e.preventDefault();
-								const query = textareaRef.current!.value;
-								handleCreateApp(query, agentMode);
-							}}
-							className="flex z-10 flex-col w-full min-h-[150px] bg-bg-4 border border-accent/30 dark:border-accent/50 dark:bg-bg-2 rounded-[18px] shadow-textarea p-5 transition-all duration-200"
-						>
-							<div 
-								className={clsx(
-									"flex-1 flex flex-col relative",
-									isDragging && "ring-2 ring-accent ring-offset-2 rounded-lg"
-								)}
-								{...dragHandlers}
-							>
-								{isDragging && (
-									<div className="absolute inset-0 flex items-center justify-center bg-accent/10 backdrop-blur-sm rounded-lg z-30 pointer-events-none">
-										<p className="text-accent font-medium">Drop images here</p>
-									</div>
-								)}
-								<textarea
-									className="w-full resize-none ring-0 z-20 outline-0 placeholder:text-text-primary/60 text-text-primary"
-									name="query"
-									value={query}
-									placeholder={`Create a ${currentPlaceholderText}`}
-									ref={textareaRef}
-									onChange={(e) => {
-										setQuery(e.target.value);
-										adjustTextareaHeight();
-									}}
-									onInput={adjustTextareaHeight}
-									onKeyDown={(e) => {
-										if (e.key === 'Enter' && !e.shiftKey) {
-											e.preventDefault();
-											const query = textareaRef.current!.value;
-											handleCreateApp(query, agentMode);
-										}
-									}}
-								/>
-								{images.length > 0 && (
-									<div className="mt-3">
-										<ImageAttachmentPreview
-											images={images}
-											onRemove={removeImage}
-										/>
-									</div>
-								)}
+			<div className="relative z-10 w-full px-4 py-12">
+				{/* Header */}
+				<motion.div
+					initial={{ opacity: 0, y: -20 }}
+					animate={{ opacity: 1, y: 0 }}
+					className="max-w-7xl mx-auto mb-16"
+				>
+					<div className="flex items-center justify-between mb-8">
+						<div className="flex items-center gap-4">
+							<div className="text-white">
+								<h1 className="text-3xl font-bold">web4.sbs</h1>
+								<p className="text-white/60">AI-Powered App Builder</p>
 							</div>
-							<div className="flex items-center justify-between mt-4 pt-1">
-								{import.meta.env.VITE_AGENT_MODE_ENABLED ? (
-									<AgentModeToggle
-										value={agentMode}
-										onChange={setAgentMode}
-										className="flex-1"
-									/>
-								) : (
-									<div></div>
-								)}
-
-								<div className="flex items-center justify-end ml-4 gap-2">
-								<ImageUploadButton
-									onFilesSelected={addImages}
-									disabled={isProcessing}
-								/>
-								<button
-									type="submit"
-									disabled={!query.trim()}
-									className="bg-accent text-white p-1 rounded-md *:size-5 transition-all duration-200 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+						</div>
+						<div className="flex items-center gap-4">
+							{user ? (
+								<Button 
+									variant="outline" 
+									className="text-white border-white/20 hover:bg-white/10"
+									onClick={() => navigate('/apps')}
 								>
-									<ArrowRight />
-								</button>
-							</div>
-							</div>
-						</form>
-					</motion.div>
+									Dashboard
+								</Button>
+							) : (
+								<>
+									<Button 
+										variant="ghost" 
+										className="text-white/80 hover:text-white hover:bg-white/10"
+										onClick={() => showAuthModal('to access your dashboard')}
+									>
+										Log in
+									</Button>
+									<Button 
+										className="bg-white text-black hover:bg-white/90"
+										onClick={() => showAuthModal('to get started')}
+									>
+										Get started
+									</Button>
+								</>
+							)}
+						</div>
+					</div>
 
-				</div>
-
-				<AnimatePresence>
-					{images.length > 0 && (
-						<motion.div
-							initial={{ opacity: 0, y: -10 }}
+					{/* Hero Section */}
+					<div className="text-center max-w-4xl mx-auto mb-20">
+						<motion.h2
+							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
-							exit={{ opacity: 0, y: -10 }}
-							className="w-full max-w-2xl px-6"
+							transition={{ delay: 0.2 }}
+							className="text-6xl md:text-7xl font-bold text-white mb-6"
 						>
-							<div className="flex items-start gap-2 px-4 py-3 rounded-xl bg-bg-4/50 dark:bg-bg-2/50 border border-accent/20 dark:border-accent/30 shadow-sm">
-								<Info className="size-4 text-accent flex-shrink-0 mt-0.5" />
-								<p className="text-xs text-text-tertiary leading-relaxed">
-									<span className="font-medium text-text-secondary">Images Beta:</span> Images guide app layout and design but may not be replicated exactly. The coding agent cannot access images directly for app assets.
-								</p>
-							</div>
-						</motion.div>
-					)}
-				</AnimatePresence>
+							Build something
+							<span className="block mt-2 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+								Lovable
+							</span>
+						</motion.h2>
+						<motion.p
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ delay: 0.3 }}
+							className="text-xl text-white/80 mb-8"
+						>
+							Create apps and websites by chatting with AI
+						</motion.p>
 
+						{/* Main Input Form */}
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ delay: 0.4 }}
+							className="relative"
+						>
+							<form
+								method="POST"
+								onSubmit={(e) => {
+									e.preventDefault();
+									const query = textareaRef.current!.value;
+									handleCreateApp(query, agentMode);
+								}}
+								className="relative z-10"
+							>
+								<div className="relative">
+									<div 
+										className={clsx(
+											"flex flex-col w-full min-h-[150px] bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-6 transition-all duration-200",
+											isDragging && "ring-2 ring-purple-400 ring-offset-2"
+										)}
+										{...dragHandlers}
+									>
+										{isDragging && (
+											<div className="absolute inset-0 flex items-center justify-center bg-purple-500/20 backdrop-blur-sm rounded-2xl z-30 pointer-events-none">
+												<p className="text-white font-medium">Drop images here</p>
+											</div>
+										)}
+										<textarea
+											className="w-full resize-none ring-0 z-20 outline-0 placeholder:text-white/50 text-white bg-transparent text-lg"
+											name="query"
+											value={query}
+											placeholder={`Create a ${currentPlaceholderText}`}
+											ref={textareaRef}
+											onChange={(e) => {
+												setQuery(e.target.value);
+												adjustTextareaHeight();
+											}}
+											onInput={adjustTextareaHeight}
+											onKeyDown={(e) => {
+												if (e.key === 'Enter' && !e.shiftKey) {
+													e.preventDefault();
+													const query = textareaRef.current!.value;
+													handleCreateApp(query, agentMode);
+												}
+											}}
+										/>
+										{images.length > 0 && (
+											<div className="mt-3">
+												<ImageAttachmentPreview
+													images={images}
+													onRemove={removeImage}
+												/>
+											</div>
+										)}
+									</div>
+									<div className="flex items-center justify-between mt-4">
+										{import.meta.env.VITE_AGENT_MODE_ENABLED ? (
+											<AgentModeToggle
+												value={agentMode}
+												onChange={setAgentMode}
+												className="flex-1"
+											/>
+										) : (
+											<div></div>
+										)}
+
+										<div className="flex items-center justify-end ml-4 gap-2">
+											<ImageUploadButton
+												onFilesSelected={addImages}
+												disabled={isProcessing}
+											/>
+											<button
+												type="submit"
+												disabled={!query.trim()}
+												className="bg-white text-black p-3 rounded-xl transition-all duration-200 hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed"
+											>
+												<ArrowRight className="size-5" />
+											</button>
+										</div>
+									</div>
+								</div>
+							</form>
+
+							<AnimatePresence>
+								{images.length > 0 && (
+									<motion.div
+										initial={{ opacity: 0, y: -10 }}
+										animate={{ opacity: 1, y: 0 }}
+										exit={{ opacity: 0, y: -10 }}
+										className="mt-4"
+									>
+										<div className="flex items-start gap-2 px-4 py-3 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-sm">
+											<Info className="size-4 text-white flex-shrink-0 mt-0.5" />
+											<p className="text-xs text-white/80 leading-relaxed">
+												<span className="font-medium text-white">Images Beta:</span> Images guide app layout and design but may not be replicated exactly.
+											</p>
+										</div>
+									</motion.div>
+								)}
+							</AnimatePresence>
+						</motion.div>
+					</div>
+
+					{/* Features Section */}
+					<motion.div
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ delay: 0.6 }}
+						className="grid md:grid-cols-3 gap-6 mb-20"
+					>
+						<div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
+							<Sparkles className="size-8 text-purple-400 mb-4" />
+							<h3 className="text-xl font-semibold text-white mb-2">AI-Powered</h3>
+							<p className="text-white/70">Build with the power of artificial intelligence</p>
+						</div>
+						<div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
+							<Code className="size-8 text-pink-400 mb-4" />
+							<h3 className="text-xl font-semibold text-white mb-2">Full Stack</h3>
+							<p className="text-white/70">Generate complete applications in minutes</p>
+						</div>
+						<div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
+							<Rocket className="size-8 text-orange-400 mb-4" />
+							<h3 className="text-xl font-semibold text-white mb-2">Instant Deploy</h3>
+							<p className="text-white/70">Launch your app with one click</p>
+						</div>
+					</motion.div>
+				</motion.div>
+
+				{/* Discover Section */}
 				<AnimatePresence>
 					{discoverReady && (
 						<motion.section
 							key="discover-section"
-							layout
 							initial={{ opacity: 0, height: 0 }}
 							animate={{ opacity: 1, height: "auto" }}
 							exit={{ opacity: 0, height: 0 }}
-							transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-							className={clsx('max-w-6xl mx-auto px-4 z-10', images.length > 0 ? 'mt-10' : 'mt-16 mb-8')}
+							transition={{ duration: 0.5 }}
+							className="max-w-7xl mx-auto px-4"
 						>
-							<div className='flex flex-col items-start'>
-								<h2 className="text-2xl font-medium text-text-secondary/80">Discover Apps built by the community</h2>
-								<div ref={discoverLinkRef} className="text-md font-light mb-4 text-text-tertiary hover:underline underline-offset-4 select-text cursor-pointer" onClick={() => navigate('/discover')} >View All</div>
-								<motion.div
-									layout
-									transition={{ duration: 0.4 }}
-									className="grid grid-cols-2 xl:grid-cols-3 gap-6"
+							<div className="flex flex-col items-start mb-8">
+								<h2 className="text-3xl font-bold text-white mb-4">Discover Apps built by the community</h2>
+								<button
+									onClick={() => navigate('/discover')}
+									className="text-white/80 hover:text-white transition-colors underline underline-offset-4"
 								>
-									<AnimatePresence mode="popLayout">
-										{apps.map(app => (
-											<AppCard
-												key={app.id}
-												app={app}
-												onClick={() => navigate(`/app/${app.id}`)}
-												showStats={true}
-												showUser={true}
-												showActions={false}
-											/>
-										))}
-									</AnimatePresence>
-								</motion.div>
+									View All
+								</button>
 							</div>
+							<motion.div
+								layout
+								className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+							>
+								<AnimatePresence mode="popLayout">
+									{apps.map(app => (
+										<AppCard
+											key={app.id}
+											app={app}
+											onClick={() => navigate(`/app/${app.id}`)}
+											showStats={true}
+											showUser={true}
+											showActions={false}
+										/>
+									))}
+								</AnimatePresence>
+							</motion.div>
 						</motion.section>
 					)}
 				</AnimatePresence>
-			</LayoutGroup>
-
-			{/* Nudge towards Discover */}
-			{user && <CurvedArrow sourceRef={discoverLinkRef} target={{ x: 50, y: window.innerHeight - 60 }} />}
-		</div>
+			</div>
+		</WavyBackground>
 	);
 }
-
-
-
-type ArrowProps = {
-	/** Ref to the source element the arrow starts from */
-	sourceRef: React.RefObject<HTMLElement | null>;
-	/** Target point in viewport/client coordinates */
-	target: { x: number; y: number };
-	/** Curve intensity (0.1 - 1.5 is typical) */
-	curvature?: number;
-	/** Optional pixel offset from source element edge */
-	sourceOffset?: number;
-	/** If true, hides the arrow when the source is offscreen/not measurable */
-	hideWhenInvalid?: boolean;
-};
-
-type Point = { x: number; y: number };
-
-export const CurvedArrow: React.FC<ArrowProps> = ({
-	sourceRef,
-	target,
-	curvature = 0.5,
-	sourceOffset = 6,
-	hideWhenInvalid = true,
-}) => {
-	const [start, setStart] = useState<Point | null>(null);
-	const [end, setEnd] = useState<Point | null>(null);
-
-	const rafRef = useRef<number | null>(null);
-	const roRef = useRef<ResizeObserver | null>(null);
-
-	const compute = () => {
-		const el = sourceRef.current;
-		if (!el) {
-			setStart(null);
-			setEnd(null);
-			return;
-		}
-
-		const rect = el.getBoundingClientRect();
-		if (!rect || rect.width === 0 || rect.height === 0) {
-			setStart(null);
-			setEnd(null);
-			return;
-		}
-
-		const endPoint: Point = { x: target.x, y: target.y };
-
-		// Choose an anchor on the source: midpoint of the side facing the target
-		const centers = {
-			right: { x: rect.right, y: rect.top + rect.height / 2 },
-			left: { x: rect.left, y: rect.top + rect.height / 2 },
-		};
-
-		// Distances to target from each side center
-		const dists = Object.fromEntries(
-			Object.entries(centers).map(([side, p]) => [
-				side,
-				(p.x - endPoint.x) ** 2 + (p.y - endPoint.y) ** 2,
-			])
-		) as Record<keyof typeof centers, number>;
-
-		const bestSide = (Object.entries(dists).sort((a, b) => a[1] - b[1])[0][0] ||
-			"right") as keyof typeof centers;
-
-		// Nudge start point slightly outside the element for visual clarity
-		const nudge = (p: Point, side: keyof typeof centers, offset: number) => {
-			switch (side) {
-				case "right":
-					return { x: p.x + offset, y: p.y };
-				case "left":
-					return { x: p.x - offset, y: p.y };
-			}
-		};
-
-		const startPoint = nudge(centers[bestSide], bestSide, sourceOffset);
-
-		setStart(startPoint);
-		setEnd(endPoint);
-	};
-
-	// Throttle updates with rAF to avoid layout thrash
-	const scheduleCompute = () => {
-		if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
-		rafRef.current = requestAnimationFrame(compute);
-	};
-
-	useEffect(() => {
-		scheduleCompute();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [target.x, target.y, sourceRef.current]);
-
-	useEffect(() => {
-		const onScroll = () => scheduleCompute();
-		const onResize = () => scheduleCompute();
-
-		window.addEventListener("scroll", onScroll, { passive: true });
-		window.addEventListener("resize", onResize);
-
-		// Track source element size changes
-		const el = sourceRef.current;
-		if ("ResizeObserver" in window) {
-			roRef.current = new ResizeObserver(() => scheduleCompute());
-			if (el) roRef.current.observe(el);
-		}
-
-		scheduleCompute();
-
-		return () => {
-			window.removeEventListener("scroll", onScroll);
-			window.removeEventListener("resize", onResize);
-			if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
-			if (roRef.current && el) roRef.current.unobserve(el);
-		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	const d = useMemo(() => {
-		if (!start || !end) return "";
-
-		const dx = end.x - start.x;
-		const dy = end.y - start.y;
-
-		// Control points: bend the curve based on the primary axis difference.
-		// This gives a nice S or C curve without sharp kinks.
-		const cpOffset = Math.max(Math.abs(dx), Math.abs(dy)) * curvature;
-
-		const c1: Point = { x: start.x + cpOffset * (dx >= 0 ? 1 : -1), y: start.y };
-		const c2: Point = { x: end.x - cpOffset * (dx >= 0 ? 1 : -1), y: end.y };
-
-		return `M ${start.x},${start.y} C ${c1.x},${c1.y} ${c2.x},${c2.y} ${end.x},${end.y}`;
-	}, [start, end, curvature]);
-
-	const hidden = hideWhenInvalid && (!start || !end);
-
-	if (start && end && (end.y - start.y > 420 || start.x - end.x < 100)) {
-		return null;
-	}
-
-	return (
-		<svg
-			aria-hidden="true"
-			style={{
-				position: "fixed",
-				inset: 0,
-				width: "100vw",
-				height: "100vh",
-				pointerEvents: "none",
-				overflow: "visible",
-				zIndex: 9999,
-				display: hidden ? "none" : "block",
-			}}
-		>
-			<defs>
-				<filter id="discover-squiggle" x="-20%" y="-20%" width="140%" height="140%">
-					<feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" seed="3" result="noise" />
-					<feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G" />
-				</filter>
-				<marker id="discover-arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth" opacity={0.20}>
-					<path d="M 0 1.2 L 7 4" stroke="var(--color-text-tertiary)" strokeWidth="1.6" strokeLinecap="round" fill="none" />
-					<path d="M 0 6.8 L 7 4" stroke="var(--color-text-tertiary)" strokeWidth="1.2" strokeLinecap="round" fill="none" />
-				</marker>
-			</defs>
-
-			<path
-				d={d}
-				// stroke="var(--color-accent)"
-				stroke="var(--color-text-tertiary)"
-				strokeOpacity={0.20}
-				strokeWidth={1.6}
-				fill="none"
-				strokeLinecap="round"
-				strokeLinejoin="round"
-				vectorEffect="non-scaling-stroke"
-				markerEnd="url(#discover-arrowhead)"
-			/>
-			{/* Soft squiggle overlay for hand-drawn feel */}
-			<g filter="url(#discover-squiggle)">
-				<path
-					d={d}
-					// stroke="var(--color-accent)"
-					stroke="var(--color-text-tertiary)"
-					strokeOpacity={0.12}
-					strokeWidth={1}
-					fill="none"
-					strokeLinecap="round"
-					strokeLinejoin="round"
-					strokeDasharray="8 6 4 9 5 7"
-					vectorEffect="non-scaling-stroke"
-				/>
-			</g>
-		</svg>
-	);
-};
