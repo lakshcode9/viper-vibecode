@@ -1,459 +1,163 @@
-# Vibe SDK
+ Web4.sbs
 
-> **An open source full-stack AI webapp generator** – Deploy your own instance of VibeSDK, an AI vibe coding platform that you can run and customize yourself.
+> **A full-stack AI vibe coding platform by Kliq Technologies** – Build, deploy, and customize your own AI-powered app builder, running entirely on your infrastructure.
 
 <div align="center">
 
+ 🚀 Live Demo
 
-## 🚀 Live Demo
-
-<!-- Live demo link removed -->
-
-*Explore VibeSDK Build before deploying your own stack.*
-
-<!-- Deploy button removed -->
+*Explore Web4.sbs Build before deploying your own stack.*
 
 </div>
 
-## Star History
+---
 
-[![Star History Chart](https://api.star-history.com/svg?repos=cloudflare/vibesdk&type=Date)](https://www.star-history.com/#cloudflare/vibesdk&Date)
+✨ What is Web4.sbs?
+
+Web4.sbs is Kliq Technologies’ open-source AI coding platform that allows users to generate full-stack web applications from natural language descriptions. Once deployed, users can simply describe what they want, and the AI agent will build and deploy the application automatically, with live previews and incremental updates.
+
+Whether you're a startup, SaaS platform, or internal team, Web4.sbs makes app creation effortless and scalable.
 
 ---
 
-## ✨ What is VibeSDK?
+🎯 Perfect For
 
-VibeSDK is an open source AI vibe coding platform. If you're building an AI-powered platform for building applications, this is a great example that you can deploy and customize to build the whole platform yourself. Once the platform is deployed, users can say what they want to build in natural language, and the AI agent will create and deploy the application. 
+Startups & AI Platforms
 
-<!-- External demo reference removed -->
+* Build your own AI-powered app generation platform.
+* Customize AI behavior and generated code patterns.
+* Keep all customer data secure on your infrastructure.
 
-## 🎯 Perfect For
+Internal Teams
 
-### Companies building AI-powered platforms
-Run your own solution that allows users to build applications in natural language. Customize the AI behavior, control the generated code patterns, integrate your own component libraries, and keep all customer data within your infrastructure. Perfect for startups wanting to enter the AI development space or established companies adding AI capabilities to their existing developer tools.  
+* Let non-technical staff create tools, dashboards, and workflows.
+* Marketing, sales, and operations can launch apps without engineering bottlenecks.
 
-### Internal development
-Enable non-technical teams to create the tools they need without waiting for engineering resources. Marketing can build landing pages, sales can create custom dashboards, and operations can automate workflows, all by describing what they want. 
+SaaS Products
 
-### SaaS platforms 
-Let your customers extend your product's functionality without learning your API or writing code. They can describe custom integrations, build specialized workflows, or create tailored interfaces specific to their business needs. 
+* Allow customers to extend your platform without coding.
+* Build custom integrations, dashboards, and interfaces dynamically.
+
+---
+
+🎯 Key Features
+
+🤖 **AI-Powered Code Generation** – Incremental, phase-wise development with error correction
+⚡ **Live App Previews** – Run generated apps safely in isolated containers
+💬 **Interactive Chat** – Refine applications through conversation
+📱 **Modern Stack** – React + TypeScript + Tailwind by default
+🚀 **One-Click Deployment** – Deploy apps instantly to your infrastructure
+📦 **GitHub Integration** – Export projects directly to repositories
 
 ---
 
-### 🎯 Key Features
+ 🏗️ Platform Components
 
-🤖 **AI Code Generation** – Phase-wise development with intelligent error correction  
-⚡ **Live Previews** – App previews running in sandboxed containers  
-💬 **Interactive Chat** – Guide development through natural conversation  
-📱 **Modern Stack** – Generates React + TypeScript + Tailwind apps  
-🚀 **One-Click Deploy** – Deploy generated apps  
-📦 **GitHub Integration** – Export code directly to your repositories  
-
-### 🏗️ Platform Components
-
-VibeSDK utilizes a modern developer stack:
-
-- **Frontend**: React + Vite with modern UI components
-- **Backend**: Serverless runtime with stateful agents  
-- **Database**: SQLite with Drizzle ORM
-- **AI**: Multiple LLM providers via a gateway
-- **Containers**: Sandboxed app previews and execution
-- **Storage**: Object storage and key-value for sessions
-- **Deployment**: Managed serverless deployment
-
-## 📋 Deploy Checklist
-
-Before deploying, have these ready:
-
-### ✅ Prerequisites
-- Cloudflare Workers Paid Plan
-<!-- Platform prerequisites removed -->
-
-### 🔑 Required API Key
-- **Google Gemini API Key** - Get from [ai.google.dev](https://ai.google.dev)
-
-<!-- Deploy flow references removed -->
-
-### 🔑 What you'll configure
-
-- `GOOGLE_AI_STUDIO_API_KEY` - Your Google Gemini API key for Gemini models
-- `JWT_SECRET` - Secure random string for session management
-- `WEBHOOK_SECRET` - Webhook authentication secret
-- `SECRETS_ENCRYPTION_KEY` - Encryption key for secrets
-- `SANDBOX_INSTANCE_TYPE` - Container performance tier (optional, see section below)
-- `ALLOWED_EMAIL` - Email address of the user allowed to use the app. This is used to verify the user's identity and prevent unauthorized access.
-- `CUSTOM_DOMAIN` - Custom domain for your app that you have configured in Cloudflare (**Required**). If you use a first-level subdomain such as `abc.xyz.com`, make sure the Advanced Certificate Manager add-on is active on that zone.
-
-### Custom domain DNS setup
-
-To serve preview apps correctly, add the following DNS record in the zone that hosts `CUSTOM_DOMAIN`:
-
-- Type: `CNAME`
-- Name: `*.abc`
-- Target: `abc.xyz.com` (replace with your base custom domain or another appropriate origin)
-- Proxy status: **Proxied** (orange cloud)
-
-Adjust the placeholder `abc`/`xyz` parts to match your domain. DNS propagation can take time—expect it to take up to an hour before previews resolve. This step may be automated in a future release, but it is required today.
-
-### 🏗️ Sandbox Instance Configuration (Optional)
-
-VibeSDK uses Cloudflare Containers to run generated applications in isolated environments. You can configure the container performance tier based on your needs and Cloudflare plan.
-
-#### Available Instance Types
-
-> **📢 Updated Oct 2025**: Cloudflare now offers [larger container instance types](https://developers.cloudflare.com/changelog/2025-10-01-new-container-instance-types/) with more resources!
-
-| Instance Type | Memory | CPU | Disk | Use Case | Availability |
-|---------------|--------|-----|------|----------|--------------|
-| `lite` (alias: `dev`) | 256 MiB | 1/16 vCPU | 2 GB | Development/testing | All plans |
-| `standard-1` (alias: `standard`) | 4 GiB | 1/2 vCPU | 8 GB | Light production apps | All plans |
-| `standard-2` | 8 GiB | 1 vCPU | 12 GB | Medium workloads | All plans |
-| `standard-3` | 12 GiB | 2 vCPU | 16 GB | Production apps | All plans (**Default**) |
-| `standard-4` | 12 GiB | 4 vCPU | 20 GB | High-performance apps | All plans |
-
-#### Configuration Options
-
-**Option A: Via Deploy UI (Recommended)**
-During the deploy flow, you can set the instance type as a **build variable**:
-- Variable name: `SANDBOX_INSTANCE_TYPE`
-- Recommended values:
-  - **Standard/Paid users**: `standard-3` (default, best balance)
-  - **High-performance needs**: `standard-4`
-
-**Option B: Via Environment Variable**
-For local deployment or CI/CD, set the environment variable:
-```bash
-export SANDBOX_INSTANCE_TYPE=standard-3  # or standard-4, standard-2, standard-1, lite
-bun run deploy
-```
-
-#### Instance Type Selection Guide
-
-**For All Users:**
-- **`standard-3`** (Recommended) - Best balance for production apps with 2 vCPU and 12 GiB memory
-- **`standard-4`** - Maximum performance with 4 vCPU for compute-intensive applications
-
-#### What This Affects
-
-The `SANDBOX_INSTANCE_TYPE` controls:
-- **App Preview Performance** - How fast generated applications run during development
-- **Build Process Speed** - Container compile and build times
-- **Concurrent App Capacity** - How many apps can run simultaneously
-- **Resource Availability** - Memory and disk space for complex applications
-
-> **💡 Pro Tip**: Start with `standard-3` (the new default) for the best balance of performance and resources. Upgrade to `standard-4` if you need maximum CPU performance for compute-intensive applications.
-
-### 🔗 Post-Deployment: OAuth Setup (Optional)
-
-OAuth configuration is **not** shown on the initial deploy page. If you want user login features, you'll need to set this up after deployment:
-
-**How to Add OAuth After Deployment:**
-1. **Find your repository** in your GitHub/GitLab account (created by "Deploy to Cloudflare" flow) 
-2. **Clone locally** and run `bun install`
-3. **Create `.dev.vars` and `.prod.vars` files** (see below for OAuth configuration)
-4. **Run `bun run deploy`** to update your deployment
-
-**Google OAuth Setup:**
-1. [Google Cloud Console](https://console.cloud.google.com) → Create Project
-2. Enable **Google+ API** 
-3. Create **OAuth 2.0 Client ID**
-4. Add authorized origins: `https://your-custom-domain.`
-5. Add redirect URI: `https://your-worker-name.workers.dev/api/auth/callback/google`
-6. Add to **both** `.dev.vars` (for local development) and `.prod.vars` (for deployment):
-   ```bash
-   GOOGLE_CLIENT_ID="your-google-client-id"
-   GOOGLE_CLIENT_SECRET="your-google-client-secret"
-   ```
-
-**GitHub OAuth Setup:**
-1. GitHub → **Settings** → **Developer settings** → **OAuth Apps**
-2. Click **New OAuth App**
-3. Application name: `Cloudflare VibeSDK`
-4. Homepage URL: `https://your-worker-name.workers.dev`
-5. Authorization callback URL: `https://your-worker-name.workers.dev/api/auth/callback/github`
-6. Add to **both** `.dev.vars` (for local development) and `.prod.vars` (for deployment):
-   ```bash
-   GITHUB_CLIENT_ID="your-github-client-id"
-   GITHUB_CLIENT_SECRET="your-github-client-secret"
-   ```
-
-**GitHub Export OAuth Setup:**
-1. Create a separate GitHub OAuth app (e.g., `VibeSDK Export`)—do not reuse the login app above.
-2. Authorization callback URL: `https://your-worker-name.workers.dev/api/github-exporter/callback` (or your custom domain equivalent).
-3. Add to **both** `.dev.vars` and `.prod.vars`:
-   ```bash
-   GITHUB_EXPORTER_CLIENT_ID="your-export-client-id"
-   GITHUB_EXPORTER_CLIENT_SECRET="your-export-client-secret"
-   ```
-4. Redeploy or restart local development so the new variables take effect.
-
+* **Frontend:** React + Vite + Tailwind
+* **Backend:** Serverless runtime with stateful agents
+* **Database:** SQLite / D1 with ORM
+* **AI:** Multiple LLM integrations via gateway
+* **Containers:** Sandboxed previews for safe app execution
+* **Storage:** Object and key-value storage for sessions
+* **Deployment:** Serverless hosting on Cloudflare / Web4 infrastructure
 
 ---
+
+ 📋 Deploy Checklist
+
+ ✅ Prerequisites
+
+* Cloudflare Workers Paid Plan (or alternative serverless runtime)
+* API keys for AI providers (OpenAI, Google Gemini, etc.)
+
+ 🔑 Required Secrets
+
+* `AI_API_KEY` – Your chosen AI provider
+* `JWT_SECRET` – Session management
+* `WEBHOOK_SECRET` – Webhook auth
+* `SANDBOX_INSTANCE_TYPE` – Container performance tier
+* `ALLOWED_EMAIL` – Access control for the app
+* `CUSTOM_DOMAIN` – Custom domain configured in Cloudflare / DNS
+
+🌐 DNS Setup for Custom Domains
+
+* Add a wildcard CNAME pointing `*.yourdomain.com` → `yourdomain.com`
+* Ensure proxying is enabled for secure previews
+
+---
+
+### 🏗️ Sandbox Instance Configuration
+
+| Instance Type | Memory  | CPU       | Disk  | Use Case                  |
+| ------------- | ------- | --------- | ----- | ------------------------- |
+| `dev`         | 256 MiB | 1/16 vCPU | 2 GB  | Testing & development     |
+| `standard-1`  | 4 GiB   | 1/2 vCPU  | 8 GB  | Light production apps     |
+| `standard-2`  | 8 GiB   | 1 vCPU    | 12 GB | Medium workloads          |
+| `standard-3`  | 12 GiB  | 2 vCPU    | 16 GB | Production apps (default) |
+| `standard-4`  | 12 GiB  | 4 vCPU    | 20 GB | High-performance apps     |
+
+> **Pro Tip:** Start with `standard-3` for most production apps; upgrade to `standard-4` if needed.
+
+---
+
 ## 🎨 How It Works
 
 ```mermaid
 graph TD
     A[User Describes App] --> B[AI Agent Analyzes Request]
-    B --> C[Generate Blueprint & Plan]
+    B --> C[Blueprint & Plan Generation]
     C --> D[Phase-wise Code Generation]
     D --> E[Live Preview in Container]
     E --> F[User Feedback & Iteration]
     F --> D
-    D --> G[Deploy]
+    D --> G[Deploy to Infrastructure]
 ```
 
-### How It Works
+Flow Summary:
 
-1. **🧠 AI Analysis**: Language models process your description
-2. **📋 Blueprint Creation**: System architecture and file structure planned
-3. **⚡ Phase Generation**: Code generated incrementally with dependency management
-4. **🔍 Quality Assurance**: Automated linting, type checking, and error correction
-5. **📱 Live Preview**: App execution in isolated containers
-6. **🔄 Real-time Iteration**: Chat interface enables continuous refinements
-7. **🚀 One-Click Deploy**: Generated apps deploy to your infrastructure
-
-## 💡 Try These Example Prompts
-
-<!-- External live demo reference removed -->
-
-**🎮 Fun Apps**
-> "Create a todo list with drag and drop and dark mode"
-
-> "Build a simple drawing app with different brush sizes and colors"
-
-> "Make a memory card game with emojis"
-
-**📊 Productivity Apps**  
-> "Create an expense tracker with charts and categories"
-
-> "Build a pomodoro timer with task management"
-
-> "Make a habit tracker with streak counters"
-
-**🎨 Creative Tools**
-> "Build a color palette generator from images"
-
-> "Create a markdown editor with live preview"  
-
-> "Make a meme generator with text overlays"
-
-**🛠️ Utility Apps**
-> "Create a QR code generator and scanner"
-
-> "Build a password generator with custom options"
-
-> "Make a URL shortener with click analytics"
+1. User input → AI analyzes requirements
+2. Blueprint & plan generated → code built in phases
+3. Live preview → iterative refinement via chat
+4. One-click deploy → fully functional web app
 
 ---
 
-## 🌍 Architecture Deep Dive
+🔒 Security & Privacy
 
-### Durable Objects for Stateful AI Agents
-```typescript
-class CodeGeneratorAgent extends DurableObject {
-  async generateCode(prompt: string) {
-    // Persistent state across WebSocket connections
-    // Phase-wise generation with error recovery
-    // Real-time progress streaming to frontend
-  }
-}
-```
-
-### Deployment
-```javascript
-// Generated apps deployed to dispatch namespace
-export default {
-  async fetch(request, env) {
-    const appId = extractAppId(request);
-    const userApp = env.DISPATCHER.get(appId);
-    return await userApp.fetch(request);
-  }
-};
-```
-
-### Iteration-based Code Generation
-VibeSDK generates apps in intelligent phases:
-
-1. **Planning Phase**: Analyzes requirements, creates file structure
-2. **Foundation Phase**: Generates package.json, basic setup files  
-3. **Core Phase**: Creates main components and logic
-4. **Styling Phase**: Adds CSS and visual design
-5. **Integration Phase**: Connects APIs and external services
-6. **Optimization Phase**: Performance improvements and error fixes
+* Encrypted secrets stored safely
+* Sandboxed execution prevents unsafe code from affecting other apps
+* Input validation and AI content filtering
+* Audit logs track all generation activity
 
 ---
 
-## After Deployment
-
-- Pushes to the `main` branch can trigger automatic deployments if CI/CD is configured.
-- For a manual deployment, copy `.dev.vars.example` to `.prod.vars`, fill in production-only secrets, and run your deploy script.
-
----
-
-## 🏠 Local Development
-
-### Quick Setup
-
-You can run VibeSDK locally by following these steps:
+🏠 Local Development
 
 ```bash
-# Clone the repository
-git clone https://github.com/cloudflare/vibesdk.git
-cd vibesdk
-
-# Install dependencies
-npm install  # or: bun install, yarn install, pnpm install
-
-# Run automated setup
-npm run setup  # or: bun run setup
-```
-
-The setup script will guide you through:
-- Installing Bun for better performance
-- Configuring Cloudflare credentials and resources
-- Setting up AI providers and OAuth
-- Creating development and production environments
-- Database setup and migrations
-- Template deployment
-
-**[📖 Complete Setup Guide](docs/setup.md)** - Detailed setup instructions and troubleshooting
-
-### Development Server
-
-After setup, start the development server:
-
-```bash
+git clone https://github.com/KliqTechnologies/web4.sbs.git
+cd web4.sbs
+bun install  # or npm / yarn
+bun run setup
 bun run dev
 ```
 
-Visit `http://localhost:5173` to access VibSDK locally.
-
-### Production Deployment
-
-Use your preferred deployment flow:
+Visit `http://localhost:5173` for local access. Production deploy via:
 
 ```bash
-bun run deploy  # Builds and deploys automatically (includes remote DB migration)
+bun run deploy
 ```
-
----
-
-### Manually Deploying the Platform
-
-#### For Local Development (.dev.vars)
-1. Copy the example file: `cp .dev.vars.example .dev.vars`
-2. Fill in your API keys and tokens
-3. Leave optional values as `"default"` if not needed
-
-#### For Production Deployment
-1. **Build Variables**: Set in your deployment platform (GitHub Actions, etc.)
-2. **Worker Secrets**: Automatically handled by deployment script or set manually:
-   ```bash
-   wrangler secret put ANTHROPIC_API_KEY
-   wrangler secret put OPENAI_API_KEY
-   wrangler secret put GOOGLE_AI_STUDIO_API_KEY
-   # ... etc
-   ```
-
-#### Environment Variable Priority
-The deployment system follows this priority order:
-1. **Environment Variables** (highest priority)
-2. **project config vars**
-3. **Default values** (lowest priority)
-
-Example: If `MAX_SANDBOX_INSTANCES` is set both as an environment variable (`export MAX_SANDBOX_INSTANCES=5`) and in wrangler.jsonc (`"MAX_SANDBOX_INSTANCES": "2"`), the environment variable value (`5`) will be used.
-
----
-
-## 🔒 Security & Privacy
-
-VibeSDK implements enterprise-grade security:
-
-- 🔐 **Encrypted Secrets**: All API keys stored with Cloudflare encryption
-- 🏰 **Sandboxed Execution**: Generated apps run in completely isolated containers
-- 🛡️ **Input Validation**: All user inputs sanitized and validated
-- 🚨 **Rate Limiting**: Prevents abuse and ensures fair usage
-- 🔍 **Content Filtering**: AI-powered detection of inappropriate content
-- 📝 **Audit Logs**: Complete tracking of all generation activities
-
----
-
-## ❓ Troubleshooting
-
-### Common Deploy Issues
-
-**🚫 "Insufficient Permissions" Error**
-- Authentication is handled automatically during deployment
-- If you see this error, try redeploying - permissions are auto-granted
-- Contact Cloudflare support if the issue persists
-
-**🤖 "AI Gateway Authentication Failed"**  
-- Confirm AI Gateway is set to **Authenticated** mode
-- Verify the authentication token has **Run** permissions
-- Check that gateway URL format is correct
-
-**🗄️ "Database Migration Failed"**
-- D1 resources may take time to provision automatically
-- Wait a few minutes and retry - resource creation is handled automatically
-- Check that your account has D1 access enabled
-
-**🔐 "Missing Required Variables"**
-- **Worker Secrets**: Verify all required secrets are set: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_AI_STUDIO_API_KEY`, `JWT_SECRET`
-- **AI Gateway Token**: `CLOUDFLARE_AI_GATEWAY_TOKEN` should be set as BOTH build variable and worker secret
-<!-- Tool-specific environment notes removed -->
-- **Authentication**: API tokens and account IDs are automatically provided by Workers Builds
-
-**🤖 "AI Gateway Not Found"**
-- **With AI Gateway Token**: The deployment script should automatically create the gateway. Check that your token has Read, Edit, and **Run** permissions.
-- **Without AI Gateway Token**: You must manually create an AI Gateway before deployment:
-  1. Go to [AI Gateway Dashboard](https://dash.cloudflare.com/ai/ai-gateway)
-  2. Create gateway named `vibesdk-gateway` (or your custom name)
-  3. Enable authentication and create a token with **Run** permissions
-
-**🏗️ "Container Instance Type Issues"**
-- **Slow app previews**: Try upgrading from `lite`/`standard-1` to `standard-3` (default) or `standard-4` instance type
-- **Out of memory errors**: Upgrade to a higher instance type (e.g., from `standard-2` to `standard-3` or `standard-4`) or check for memory leaks in generated apps
-- **Build timeouts**: Use `standard-3` or `standard-4` for faster build times with more CPU cores
-- **Using legacy types**: The `dev` and `standard` aliases still work but map to `lite` and `standard-1` respectively
-
-### Need Help?
-
-- 🐛 Report issues on [GitHub](https://github.com/your-org/vibecoding-starter-kit/issues)
 
 ---
 
 ## 🤝 Contributing
 
-Want to contribute to VibeSDK? Here's how:
-
-1. **🍴 Fork** via the Deploy button (creates your own instance!)
-2. **💻 Develop** new features or improvements  
-3. **✅ Test** thoroughly with `bun run test`
-4. **📤 Submit** Pull Request to the main repository
-
----
-
-## 📚 Resources
-
-### 🛠️ **Cloudflare Platform**
-- [Workers](https://developers.cloudflare.com/workers/) - Serverless compute platform
-- [Durable Objects](https://developers.cloudflare.com/durable-objects/) - Stateful serverless objects
-- [D1](https://developers.cloudflare.com/d1/) - SQLite database at the edge
-- [R2](https://developers.cloudflare.com/r2/) - Object storage without egress fees
-- [AI Gateway](https://developers.cloudflare.com/ai-gateway/) - Unified AI API gateway
-
-### 💬 **Community**  
-- [Discord](https://discord.gg/cloudflaredev) - Real-time chat and support
-- [Community Forum](https://community.cloudflare.com/) - Technical discussions
-- [GitHub Discussions](https://github.com/your-org/cloudflare-vibecoding-starter-kit/discussions) - Feature requests and ideas
-
-### 🎓 **Learning Resources**
-- [Workers Learning Path](https://developers.cloudflare.com/learning-paths/workers/) - Master Workers development
-- [Full-Stack Guide](https://developers.cloudflare.com/pages/tutorials/build-a-blog-using-nuxt-and-sanity/) - Build complete applications
-- [AI Integration](https://developers.cloudflare.com/workers-ai/) - Add AI to your apps
+1. Fork the repo
+2. Develop new features or improvements
+3. Test thoroughly (`bun run test`)
+4. Submit a Pull Request to the main repository
 
 ---
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT License – see [LICENSE](LICENSE) for details.
